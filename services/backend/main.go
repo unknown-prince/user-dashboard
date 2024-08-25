@@ -4,9 +4,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
+const Port = 8000
+
 func main() {
+	port := strconv.Itoa(Port)
+
 	handler := http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		resp := []byte(`{"status": "ok"}`)
 		rw.Header().Set("Content-Type", "application/json")
@@ -14,6 +19,6 @@ func main() {
 		rw.Write(resp)
 	})
 
-	log.Println("Server is available at http://localhost:8000")
-	log.Fatal(http.ListenAndServe(":8000", handler))
+	log.Println("Server is available at http://localhost:" + port)
+	log.Fatal(http.ListenAndServe(":"+port, handler))
 }
