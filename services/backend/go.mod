@@ -6,6 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.49
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
+	github.com/vektah/gqlparser/v2 v2.5.16
 )
 
 require (
@@ -34,7 +35,6 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/urfave/cli/v2 v2.27.2 // indirect
-	github.com/vektah/gqlparser/v2 v2.5.16 // indirect
 	github.com/xrash/smetrics v0.0.0-20240312152122-5f08fbb34913 // indirect
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
