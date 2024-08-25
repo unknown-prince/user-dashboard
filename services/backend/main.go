@@ -13,7 +13,7 @@ func main() {
 	port := strconv.Itoa(Port)
 
 	handler := http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		resp := []byte(`{"status": "ok"}`)
+		resp := []byte(`{"status": "online"}`)
 		rw.Header().Set("Content-Type", "application/json")
 		rw.Header().Set("Content-Length", fmt.Sprint(len(resp)))
 		rw.Write(resp)
