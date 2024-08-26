@@ -6,7 +6,7 @@ type Query struct {
 }
 
 type User struct {
-	ID         string `json:"id"`
+	ID         int    `json:"id"`
 	Name       string `json:"name"`
 	Surname    string `json:"surname"`
 	Number     int    `json:"number"`

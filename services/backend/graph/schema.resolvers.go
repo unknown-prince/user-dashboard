@@ -8,22 +8,26 @@ import (
 	"context"
 
 	"github.com/unknown-prince/user-dashboard/graph/model"
+	users "github.com/unknown-prince/user-dashboard/models"
 )
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	var users []*model.User
-	dummyUser := model.User{
-		Name:       "John",
-		Surname:    "Doe",
-		Number:     123,
-		Gender:     "Male",
-		Country:    "South Africa",
-		Dependents: 3,
-		Birthdate:  "22-Jun-1995",
+	var resultUsers []*model.User
+	var dbUsers = users.GetAll()
+	for _, user := range dbUsers {
+		resultUsers = append(resultUsers, &model.User{
+			ID:         user.ID,
+			Name:       user.Name,
+			Surname:    user.Surname,
+			Number:     user.Number,
+			Gender:     user.Gender,
+			Country:    user.Country,
+			Dependents: user.Dependents,
+			Birthdate:  user.Birthdate,
+		})
 	}
-	users = append(users, &dummyUser)
-	return users, nil
+	return resultUsers, nil
 }
 
 // Query returns QueryResolver implementation.
