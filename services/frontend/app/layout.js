@@ -12,20 +12,19 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
-  { name: 'Users', href: '#', current: true },
-  { name: 'Overview', href: '#', current: false },
+  { name: 'Users', href: '/users', current: true },
+  { name: 'Overview', href: '/overview', current: false },
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Layout({ children }) {
+export default function Layout({ children, users, overview }) {
   return (
-    <html>
-      <body>
-        <div>
-          <Disclosure as="nav" className="bg-gray-800">
+    <html class="h-full bg-gray-100">
+      <body class="h-full">
+        <Disclosure as="nav" className="bg-gray-800">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -84,11 +83,9 @@ export default function Layout({ children }) {
                 ))}
               </div>
             </DisclosurePanel>
-          </Disclosure>
-        </div>
-        <div>
-          {children}
-        </div>
+        </Disclosure>
+
+        {children}
       </body>
     </html>
   )
