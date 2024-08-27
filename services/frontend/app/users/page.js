@@ -1,5 +1,23 @@
-export default function Page() {
-    return (
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:8080/query',  
+  cache: new InMemoryCache()
+});
+
+export default async function Page() {
+  const users = await client.query({
+    query: gql`
+      {
+        users {
+          id
+          name
+          surname
+        }
+      }`
+  });
+
+  return (
       <div>
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -20,18 +38,14 @@ export default function Page() {
                         </tr>
                       </thead>
                       <tbody class="bg-white dark:bg-slate-800">
-                        <tr>
-                          <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-                          <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">Malcolm Lockyer</td>
-                        </tr>
-                        <tr>
-                          <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">Witchy Woman</td>
-                          <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">The Eagles</td>
-                        </tr>
-                        <tr>
-                          <td class="border-b border-slate-200 dark:border-slate-600 p-4 pl-8 text-slate-500 dark:text-slate-400">Shining Star</td>
-                          <td class="border-b border-slate-200 dark:border-slate-600 p-4 text-slate-500 dark:text-slate-400">Earth, Wind, and Fire</td>
-                        </tr>
+                        {users.data.users.map((user) => {
+                          return (
+                            <tr key={user.id}>
+                              <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{user.name}</td>
+                              <td class="border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">{user.surname}</td>
+                            </tr>
+                          )
+                        })}
                       </tbody>
                     </table>
                   </div>
