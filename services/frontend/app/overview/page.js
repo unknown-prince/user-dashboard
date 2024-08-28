@@ -1,12 +1,13 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import Barchart from "../components/barchart";
+import Linechart from "../components/linechart";
 
 const client = new ApolloClient({
   uri: 'http://localhost:8080/query',  
   cache: new InMemoryCache()
 });
 
-export default async function CardBarChart() {
+export default async function Page() {
   const users = await client.query({
     query: gql`
       {
@@ -48,15 +49,16 @@ export default async function CardBarChart() {
   return (
     <>
       <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Overview</h1>
-          </div>
-        </header>
-        <main>
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <Barchart title={"Dependents By Country"} labels={labels} barData={barData} />
-          </div>
-        </main>
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Overview</h1>
+        </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <Barchart chartId={"chart_".concat(Date.now())} title={"Dependents By Country"} labels={labels} graphData={barData} />
+          <Linechart chartId={"chart_".concat(Date.now())} title={"Age Distribution"} labels={labels} graphData={barData} />
+        </div>
+      </main>
     </>
   );
 }
