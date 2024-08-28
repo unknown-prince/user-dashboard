@@ -22,8 +22,8 @@ function classNames(...classes) {
 
 export default function Layout({ children, users, overview }) {
   return (
-    <html class="h-full bg-gray-100">
-      <body class="h-full">
+    <html className="h-full bg-gray-100">
+      <body className="h-full">
         <Disclosure as="nav" className="bg-gray-800">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
