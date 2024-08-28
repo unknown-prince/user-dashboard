@@ -1,16 +1,17 @@
 "use client";
 import { useEffect } from "react"
 import { Chart } from "chart.js";
-function Barchart({ chartId, title, labels, graphData}) {
+function Linechart({ chartId, title, labels, graphData}) {
     useEffect(() => {
         if (document.getElementById(chartId)) {
             var ctx = document.getElementById(chartId).getContext('2d');
             var myChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: labels,
                     datasets: graphData,
-                    borderWidth: 2
+                    fill: false,
+                    tension: 0.1
                 },
             });
         }
@@ -18,7 +19,7 @@ function Barchart({ chartId, title, labels, graphData}) {
 
     return (
         <>
-            {/* Bar chart */}
+            {/* Line chart */}
             <h1 className="mx-auto mt-10 text-xl font-semibold capitalize ">{title}</h1>
             <div className="flex mx-auto">
                 <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit shadow-xl'>
@@ -29,4 +30,4 @@ function Barchart({ chartId, title, labels, graphData}) {
     )
 }
 
-export default Barchart;
+export default Linechart;
