@@ -12,7 +12,7 @@ import (
 )
 
 // Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+func (r *queryResolver) Users(ctx context.Context, gender string) ([]*model.User, error) {
 	var resultUsers []*model.User
 	var dbUsers = users.GetAll()
 	for _, user := range dbUsers {
