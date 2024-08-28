@@ -5,7 +5,7 @@ function Barchart({ chartId, title, labels, graphData}) {
     useEffect(() => {
         if (document.getElementById(chartId)) {
             var ctx = document.getElementById(chartId).getContext('2d');
-            var myChart = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
