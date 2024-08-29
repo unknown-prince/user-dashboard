@@ -16,5 +16,5 @@ type User {
 }
 
 type Query {
-  users(gender:String!): [User!]!
+  users(gender:String): [User!]!
 }

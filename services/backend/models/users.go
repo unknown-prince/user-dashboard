@@ -17,8 +17,14 @@ type User struct {
 	Birthdate  string `json:"birthdate"`
 }
 
-func GetAll() []User {
-	stmt, err := database.Db.Prepare("SELECT id, name, surname, number, gender, country, dependents, birthdate FROM users")
+func GetAll(gender *string) []User {
+	query := "SELECT id, name, surname, number, gender, country, dependents, birthdate FROM users"
+	if gender != nil {
+		var genderValue string = *gender
+		query += " WHERE gender = \"" + genderValue + "\""
+	}
+
+	stmt, err := database.Db.Prepare(query)
 	if err != nil {
 		log.Fatal(err)
 	}
