@@ -47,7 +47,7 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Query struct {
-		Users func(childComplexity int, gender *string) int
+		Users func(childComplexity int, gender *string, dateFrom *string, dateTo *string) int
 	}
 
 	User struct {
@@ -63,7 +63,7 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
-	Users(ctx context.Context, gender *string) ([]*model.User, error)
+	Users(ctx context.Context, gender *string, dateFrom *string, dateTo *string) ([]*model.User, error)
 }
 
 type executableSchema struct {
@@ -95,7 +95,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Users(childComplexity, args["gender"].(*string)), true
+		return e.complexity.Query.Users(childComplexity, args["gender"].(*string), args["dateFrom"].(*string), args["dateTo"].(*string)), true
 
 	case "User.birthdate":
 		if e.complexity.User.Birthdate == nil {
@@ -288,6 +288,24 @@ func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["gender"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["dateFrom"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dateFrom"))
+		arg1, err = ec.unmarshalODate2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["dateFrom"] = arg1
+	var arg2 *string
+	if tmp, ok := rawArgs["dateTo"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dateTo"))
+		arg2, err = ec.unmarshalODate2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["dateTo"] = arg2
 	return args, nil
 }
 
@@ -343,7 +361,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Users(rctx, fc.Args["gender"].(*string))
+		return ec.resolvers.Query().Users(rctx, fc.Args["gender"].(*string), fc.Args["dateFrom"].(*string), fc.Args["dateTo"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3526,6 +3544,22 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	res := graphql.MarshalBoolean(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalODate2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODate2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalString(*v)
 	return res
 }
 
