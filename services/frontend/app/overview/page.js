@@ -5,22 +5,37 @@ import Piechart from "../components/piechart";
 
 const client = new ApolloClient({
   uri: 'http://localhost:8080/query',  
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
-export default async function Page() {
-  const users = await client.query({
-    query: gql`
-      {
-        users {
-          country
-          dependents
-          birthdate
-          gender
-        }
-      }`
-  });
+async function getUsers(gender) {
+  let query = gql`
+  {
+    users {
+      country
+      dependents
+      birthdate
+      gender
+    }
+  }`;
 
+  if (gender != null) {
+    query = gql`{
+      users(gender: "`+gender+`") {
+        country
+        dependents
+        birthdate
+        gender
+      }
+    }`
+  }
+
+  return await client.query({
+    query: query
+  });
+}
+
+async function buildData(users) {
   let dependentsData = [];
   let ageData = Array(4).fill(0);
   let genderData = Array(2).fill(0);
@@ -96,6 +111,44 @@ export default async function Page() {
     backgroundColor: ['rgb(255, 99, 132)', 'rgb(75, 192, 192)']
   }];
 
+  return {
+    "dependentsData": dependentsData,
+    "ageData": ageData,
+    "genderData": genderData,
+    "dependentsLabels": dependentsLabels,
+    "ageLabels": ageLabels,
+    "genderLabels": genderLabels
+  };
+}
+
+let genderToFilter = null;
+let dependentsData = null;
+let ageData = null;
+let genderData = null;
+let dependentsLabels = null;
+let ageLabels = null;
+let genderLabels = null;
+const dependentsChartId = "chart_1";
+const ageChartId = "chart_2";
+const genderChartId = "chart_3";
+
+async function fetchUserData() {
+  const dataSet = await buildData(await getUsers(genderToFilter));
+  dependentsData = dataSet['dependentsData'];
+  ageData = dataSet['ageData'];
+  genderData = dataSet['genderData'];
+  dependentsLabels = dataSet['dependentsLabels'];
+  ageLabels = dataSet['ageLabels'];
+  genderLabels = dataSet['genderLabels'];
+}
+
+export default async function Page() {
+  function filterGender() {
+    console.log(document.getElementById('genderFilter').value);
+  }
+
+  await fetchUserData();
+
   return (
     <>
       <header className="bg-white shadow">
@@ -105,9 +158,18 @@ export default async function Page() {
       </header>
       <main>
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <Barchart chartId={"chart_".concat(Date.now() + Math.random())} title={"Dependents By Country"} labels={dependentsLabels} graphData={dependentsData} />
-          <Linechart chartId={"chart_".concat(Date.now() + Math.random())} title={"Age Groups"} labels={ageLabels} graphData={ageData} />
-          <Piechart chartId={"chart_".concat(Date.now() + Math.random())} title={"Genders"} labels={genderLabels} graphData={genderData} />
+          <div className="flex flex-col">
+            <label className="text-stone-600 text-sm font-medium">Gender</label>
+
+            <select defaultValue="" id="genderFilter" className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+              <option value="">All</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>)
+            </select>
+          </div>
+          <Barchart chartId={dependentsChartId} title={"Dependents By Country"} labels={dependentsLabels} graphData={dependentsData} />
+          <Linechart chartId={ageChartId} title={"Age Groups"} labels={ageLabels} graphData={ageData} />
+          <Piechart chartId={genderChartId} title={"Genders"} labels={genderLabels} graphData={genderData} />
         </div>
       </main>
     </>

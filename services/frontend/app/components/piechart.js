@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react"
+import { useEffect } from "react";
 import { Chart } from "chart.js";
 function Piechart({ chartId, title, labels, graphData}) {
     useEffect(() => {
